@@ -6,6 +6,12 @@
 
         <h1>BLOG POSTS</h1>
 
+        @if (session('deleted'))
+            <div class="alert alert-success mt-3">
+                {{ session('deleted') }} deleted successfully!
+            </div>
+        @endif
+
         <table class="table">
             <thead>
                 <tr>
@@ -22,8 +28,14 @@
                         <td>{{ $post->title }}</td>
                         <td>{{ $post->author }}</td>
                         <td><a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-primary">SHOW</a></td>
-                        <td>EDIT</td>
-                        <td>DELETE</td>
+                        <td><a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-secondary">EDIT</a></td>
+                        <td>
+                            <form action="{{route('admin.posts.destroy', $post->id)}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">DELETE</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
