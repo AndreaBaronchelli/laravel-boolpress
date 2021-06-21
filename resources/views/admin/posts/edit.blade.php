@@ -30,6 +30,19 @@
                 <input type="text" id="author" name="author" placeholder="Your Name Here..." class="form-control" value="{{$post->author}}">
             </div>
 
+            <div class="mb-3">
+                <label for="category_id" class="form-label">Category</label> 
+                <select name="category_id" id="category_id" class="form-control">
+                    <option value="">--Select a Category--</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id}}"
+                            @if ($category->id == old('category_id', $post->category_id)) selected @endif>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <button type="submit" class='btn btn-primary'>EDIT</button>
         </form>
     </div>

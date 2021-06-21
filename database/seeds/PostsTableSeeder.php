@@ -18,6 +18,7 @@ class PostsTableSeeder extends Seeder
             $new_post = new Post();
 
             $new_post->title = $faker->sentence;
+            $new_post->category_id = rand(1,5);
             $new_post->slug = Str::slug($new_post->title, '-');
             $new_post->content = $faker->paragraph(20);
             $new_post->author = $faker->firstName;
