@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
+use App\Type;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,9 @@ class PostController extends Controller
     public function create()
     {   
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $types = Type::all();
+
+        return view('admin.posts.create', compact('categories', 'types'));
     }
 
     /**
@@ -47,7 +50,8 @@ class PostController extends Controller
             'title' => 'required|unique:posts|max:50',
             'content' => 'required',
             'author' => 'required|min:4',
-            'category_id' => 'exists:categories,id|nullable'
+            'category_id' => 'exists:categories,id|nullable',
+            'types' => 'nullable|exists:types,id'
         ]);
 
         $data = $request->all();
@@ -59,6 +63,10 @@ class PostController extends Controller
         $new_post->fill($data);
 
         $new_post->save();
+
+        if (array_key_exists('types', $data)) {
+            $new_post->types()->attach($data['types']);
+        }
 
         return redirect()->route('admin.posts.show', $new_post->id);
     }
@@ -87,7 +95,10 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $types = Type::all();
+
+
+        return view('admin.posts.edit', compact('post', 'categories', 'types'));
     }
 
     /**
@@ -103,7 +114,9 @@ class PostController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'title' => ['required', 'max:50', Rule::unique('posts')->ignore($id)],
             'content' => 'required',
-            'author' => 'required|min:4'
+            'author' => 'required|min:4',
+            'type' => 'nullable|exists:types',
+
         ]);
 
         $data = $request->all();
@@ -111,7 +124,13 @@ class PostController extends Controller
         $post['slug'] = Str::slug($data['title']);
 
         $post = Post::find($id);
+        
         $post->update($data);
+
+        if (array_key_exists('types', $data)) {
+            $post->types()->sync($data['types']);
+        }
+        
 
         return redirect()->route('admin.posts.show', $post->id);
     }

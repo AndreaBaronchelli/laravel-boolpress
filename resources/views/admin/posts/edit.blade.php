@@ -42,6 +42,23 @@
                     @endforeach
                 </select>
             </div>
+           
+            <div class="mb-3">
+                
+                @foreach ($types as $type)
+                    <span class="mr-2">
+                        <input 
+                        type="checkbox" id="type{{$loop->iteration}}" name="types[]" 
+                        value="{{$type->id}}"
+                        @if ($errors->any() && in_array($type->id, old('types'))) 
+                            checked
+                        @elseif (! $errors->any() && $post->types->contains($type->id))
+                            checked
+                        @endif>
+                        <label for="type{{$loop->iteration}}">{{$type->name}}</label>
+                    </span>
+                @endforeach
+            </div>
 
             <button type="submit" class='btn btn-primary'>EDIT</button>
         </form>

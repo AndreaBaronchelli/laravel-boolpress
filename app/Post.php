@@ -11,7 +11,7 @@ class Post extends Model
         'title',
         'slug',
         'content',
-        'author'
+        'author',
     ];
 
     public function category() {
