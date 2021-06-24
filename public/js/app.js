@@ -1930,6 +1930,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1939,7 +1956,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      posts: []
+      posts: [],
+      pagination: {}
     };
   },
   created: function created() {
@@ -1949,12 +1967,33 @@ __webpack_require__.r(__webpack_exports__);
     getPosts: function getPosts() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://127.0.0.1:8000/api/posts").then(function (res) {
-        _this.posts = res.data.posts;
-        console.log(res.data.posts);
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://127.0.0.1:8000/api/posts?page=".concat(page)).then(function (res) {
+        _this.posts = res.data.posts.data;
+        console.log(res.data.posts.data);
+        _this.pagination = {
+          current: res.data.posts.current_page,
+          last: res.data.posts.last_page
+        };
       })["catch"](function (err) {
         console.log(err);
       });
+    },
+    formatDate: function formatDate(date) {
+      var postDate = new Date(date);
+      var day = postDate.getDate();
+      var month = postDate.getMonth() + 1;
+      var year = postDate.getFullYear();
+
+      if (day < 10) {
+        day = "0" + day;
+      }
+
+      if (month < 10) {
+        month = "0" + month;
+      }
+
+      return "".concat(day, "-").concat(month, "-").concat(year);
     }
   }
 });
@@ -38307,14 +38346,60 @@ var render = function() {
                 _c("h2", [_vm._v(_vm._s(post.title))]),
                 _vm._v(" "),
                 _c("div", { staticClass: "date" }, [
-                  _vm._v(_vm._s(post.created_at))
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.formatDate(post.created_at)) +
+                      "\n                    "
+                  )
                 ]),
                 _vm._v(" "),
                 _c("a", { attrs: { href: "" } }, [_vm._v("Read More...")])
               ])
             }),
             0
-          )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "navigation" }, [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.pagination.current > 1,
+                    expression: "pagination.current > 1"
+                  }
+                ],
+                on: {
+                  click: function($event) {
+                    return _vm.getPosts(_vm.pagination.current - 1)
+                  }
+                }
+              },
+              [_vm._v("\n                    Prev\n                ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.pagination.current < _vm.pagination.last,
+                    expression: "pagination.current < pagination.last"
+                  }
+                ],
+                on: {
+                  click: function($event) {
+                    return _vm.getPosts(_vm.pagination.current + 1)
+                  }
+                }
+              },
+              [_vm._v("\n                    Next\n                ")]
+            )
+          ])
         ])
       ])
     ],
