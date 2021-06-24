@@ -7,6 +7,7 @@
 require("./bootstrap");
 
 window.Vue = require("vue");
+window.axios = require("axios");
 
 // VUE INSTANCE
 import App from "./App.vue";

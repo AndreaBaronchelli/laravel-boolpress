@@ -1908,7 +1908,17 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Header_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Header.vue */ "./resources/js/components/Header.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Header_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Header.vue */ "./resources/js/components/Header.vue");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1921,10 +1931,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
   components: {
-    Header: _components_Header_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Header: _components_Header_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      posts: []
+    };
+  },
+  created: function created() {
+    this.getPosts();
+  },
+  methods: {
+    getPosts: function getPosts() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://127.0.0.1:8000/api/posts").then(function (res) {
+        _this.posts = res.data.posts;
+        console.log(res.data.posts);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
   }
 });
 
@@ -6407,7 +6438,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "body {\n  font-family: Arial, Helvetica, sans-serif;\n}", ""]);
+exports.push([module.i, ".container {\n  max-width: 1170px;\n  margin: 0 auto;\n}\nbody {\n  font-family: Arial, Helvetica, sans-serif;\n}", ""]);
 
 // exports
 
@@ -38259,20 +38290,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("Header"), _vm._v(" "), _vm._m(0)], 1)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("main", [
-      _c("h1", [_vm._v("WELCOME")]),
+  return _c(
+    "div",
+    [
+      _c("Header"),
       _vm._v(" "),
-      _c("p", [_vm._v("Work in progress")])
-    ])
-  }
-]
+      _c("main", [
+        _c("div", { staticClass: "container" }, [
+          _c("h1", [_vm._v("My Blog")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "posts" },
+            _vm._l(_vm.posts, function(post) {
+              return _c("div", { key: post.id, staticClass: "post" }, [
+                _c("h2", [_vm._v(_vm._s(post.title))]),
+                _vm._v(" "),
+                _c("div", { staticClass: "date" }, [
+                  _vm._v(_vm._s(post.created_at))
+                ]),
+                _vm._v(" "),
+                _c("a", { attrs: { href: "" } }, [_vm._v("Read More...")])
+              ])
+            }),
+            0
+          )
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -50629,7 +50678,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); // VUE INSTANCE
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); // VUE INSTANCE
 
 
 var app = new Vue({
