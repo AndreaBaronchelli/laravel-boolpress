@@ -1,21 +1,38 @@
 <template>
-    <div>
-        <Header />
+    <div class="container">
+        <div class="container">
+            <h1>My Blog</h1>
+            <div class="posts">
+                <div class="post" v-for="post in posts" :key="post.id">
+                    <h2>{{ post.title }}</h2>
+                    <div class="date">
+                        {{ formatDate(post.created_at) }}
+                    </div>
+                </div>
+            </div>
+            <div class="navigation">
+                <button
+                    @click="getPosts(pagination.current - 1)"
+                    v-show="pagination.current > 1"
+                >
+                    Prev
+                </button>
 
-        <main>
-            <router-view></router-view>
-        </main>
+                <button
+                    @click="getPosts(pagination.current + 1)"
+                    v-show="pagination.current < pagination.last"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import axios from "axios";
-import Header from "./components/Header.vue";
 export default {
-    name: "App",
-    components: {
-        Header
-    },
+    name: "Blog",
     data() {
         return {
             posts: [],
@@ -61,9 +78,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../sass/frontoffice/_utilities.scss";
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-</style>
+<style></style>

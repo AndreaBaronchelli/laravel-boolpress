@@ -13,4 +13,10 @@ class PostController extends Controller
         
         return response()->json(compact('posts'));
     }
+
+    public function show($slug) {
+        $post = Post::where('slug', $slug)->with(['category', 'types'])->first();
+
+        return response()->json($post);
+    }
 }
