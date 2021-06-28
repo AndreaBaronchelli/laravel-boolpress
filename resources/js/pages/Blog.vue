@@ -8,6 +8,13 @@
                     <div class="date">
                         {{ formatDate(post.created_at) }}
                     </div>
+                    <router-link
+                        :to="{
+                            name: 'post-detail',
+                            params: { slug: post.slug }
+                        }"
+                        >Read More...</router-link
+                    >
                 </div>
             </div>
             <div class="navigation">
@@ -48,7 +55,6 @@ export default {
                 .get(`http://127.0.0.1:8000/api/posts?page=${page}`)
                 .then(res => {
                     this.posts = res.data.posts.data;
-                    console.log(res.data.posts.data);
                     this.pagination = {
                         current: res.data.posts.current_page,
                         last: res.data.posts.last_page
